@@ -5,7 +5,7 @@ const router =  express.Router();
 const ArticlesController = require('../controllers/articles');
 
 //Redis Routes Caching
-const redisCache = require('../middleware/redis_route_caching');
+const redisCache = require('../middleware/redis_router_caching');
 
 /*
 
@@ -27,7 +27,6 @@ router.get('/orderDate',  redisCache.checkCachedData,
                           ArticlesController.articles_get_all_orderedBy_date );
 
 //Get all articles that match , the title we are seeking
-router.get('/searchTitle',
-                           ArticlesController.articles_searchBy_title );
+router.get('/searchTitle', ArticlesController.articles_searchBy_title );
 
 module.exports = router;

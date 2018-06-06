@@ -1,40 +1,43 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var helmet = require('helmet');
 
+//Router import
 var articlesRouter = require('./api/routes/articles')
 
+//Rate Limit import
+var rateLimit = require('./api/middleware/security/ratelimit');
 
+//init express
 var app = express();
 
 //Helmet Protection
-app.use(helmet.noCache());
-app.use(helmet({
-    frameguard: {
-      action: 'deny' //allow if our app is <frame> || <object>
-    }
-}));
+// app.use(helmet.noCache());
+// app.use(helmet({
+//     frameguard: {
+//       action: 'deny' //allow if our app is <frame> || <object>
+//     }
+// }));
 
 //Rate Limiter with Redis and express-rate-limit
 //Prevents Bruteforces from the same IP
-app.use(rateLimit.limiter);
+// app.use(rateLimit.limiter);
 
 
-//Using our packages , to the middleware cycle
+//Using util packages , to the middleware cycle
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
-//Every request that arrives, is getting build to the header;
+//Every request that arrives, is getting build on the header part
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');// * = allow every origin to has access.otherwise -->
-  // res.header('Access-Control-Allow-Origin', 'https://my-rest-api.com/api');//To only allow a specific path
 
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');//Allow these headers
+  /* DEN ONLY */
+  res.header('Access-Control-Allow-Origin', '*');// * = allow every origin to has access
+
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');//Allow also only these headers
   
   //When browser posts or puts , sends first an OPTIONS request to check if he is allowed
   if ( req.method === 'OPTIONS' ){

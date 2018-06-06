@@ -24,7 +24,7 @@ redisClient.on('error',function(err) {
     console.error("Error in Redis : " + err);
 });
 
-//This function , is checking if the expired data , is still exists (RAM) from previous calls
+//This function , is checking if the expired data , if still is existing (in RAM) from previous calls
 function checkCachedData(req, res, next){
     //Setting Up a Url-based key
     let key = "__expIress__" + req.originalUrl || req.url;
