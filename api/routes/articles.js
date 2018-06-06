@@ -14,19 +14,7 @@ router.get('/orderTitle', ArticlesController.articles_get_all_orderedBy_title );
 //Get all articles order by Date and joined with the creators
 router.get('/orderDate', ArticlesController.articles_get_all_orderedBy_date );
 
-// router.post('/', checkAuth, 
-//                  bodyValidation.validateOrder,
-//                  OrdersController.orders_create_order );
-
-// router.get('/:orderid', checkAuth, 
-//                         redisCache.checkCachedData,
-//                         OrdersController.orders_get_orderid );
-
-// router.patch('/:orderid', checkAuth, 
-//                           bodyValidation.validateOrder,
-//                           OrdersController.orders_patch_order );
-
-// router.delete('/:orderid', checkAuth, 
-//                            OrdersController.orders_delete_order );
+//Get all articles that match , the title we are seeking
+router.get('/searchTitle', ArticlesController.articles_searchBy_title );
 
 module.exports = router;
