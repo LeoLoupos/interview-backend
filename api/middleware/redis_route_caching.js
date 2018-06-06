@@ -1,6 +1,16 @@
 var redis = require('redis');
 var redisClient = redis.createClient({host : 'localhost', port : 6379});
 
+/*
+
+This file holds a middleware function that helps us , cache expired data
+in order to avoid workload on the server side.
+In other words, if we have already stored the needed data , we dont need to call1 the database again, but
+we can retrieve the data from Redis
+
+*/
+
+
 //Event Handdlers
 redisClient.on('connect', function(){
     console.log('Connected to Redis');
@@ -21,9 +31,11 @@ function checkCachedData(req, res, next){
     
     //retrieve data if it exists
     redisClient.get(key, function(err, reply){
+      //If it exists we respond with that data
       if(reply){
         res.send(JSON.parse(reply));
       }else{
+        //Otherwise we setting up our response body , while we set an expired data , on the server
         res.sendResponse = res.send;
         res.send = (body) => {
             redisClient.setex(key, 2 * 3600, JSON.stringify(body));

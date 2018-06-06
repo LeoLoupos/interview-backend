@@ -7,6 +7,7 @@ var helmet = require('helmet');
 
 var articlesRouter = require('./api/routes/articles')
 
+
 var app = express();
 
 //Helmet Protection
@@ -17,16 +18,16 @@ app.use(helmet({
     }
 }));
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
+//Rate Limiter with Redis and express-rate-limit
+//Prevents Bruteforces from the same IP
+app.use(rateLimit.limiter);
+
 
 //Using our packages , to the middleware cycle
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 //Every request that arrives, is getting build to the header;
 app.use((req, res, next) => {

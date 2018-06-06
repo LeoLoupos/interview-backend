@@ -7,6 +7,12 @@ const ArticlesController = require('../controllers/articles');
 //Redis Routes Caching
 const redisCache = require('../middleware/redis_route_caching');
 
+/*
+
+This file holds the Express Router for our `/articles` path
+The controller , handles how/what the response will sent 
+
+*/
 
 //Get all articles joined with the creators
 router.get('/', redisCache.checkCachedData,
@@ -21,7 +27,7 @@ router.get('/orderDate',  redisCache.checkCachedData,
                           ArticlesController.articles_get_all_orderedBy_date );
 
 //Get all articles that match , the title we are seeking
-router.get('/searchTitle', redisCache.checkCachedData,
+router.get('/searchTitle',
                            ArticlesController.articles_searchBy_title );
 
 module.exports = router;
