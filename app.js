@@ -14,12 +14,12 @@ var rateLimit = require('./api/middleware/security/ratelimit');
 var app = express();
 
 //Helmet Protection
-// app.use(helmet.noCache());
-// app.use(helmet({
-//     frameguard: {
-//       action: 'deny' //allow if our app is <frame> || <object>
-//     }
-// }));
+app.use(helmet.noCache());
+app.use(helmet({
+    frameguard: {
+      action: 'deny' //allow if our app is <frame> || <object>
+    }
+}));
 
 //Rate Limiter with Redis and express-rate-limit
 //Prevents Bruteforces from the same IP

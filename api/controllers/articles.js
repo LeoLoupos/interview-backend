@@ -70,7 +70,7 @@ exports.articles_get_all_orderedBy_title =  async (req, res, next) => {
                 },
                 request: {
                     type: 'GET',
-                    url: `http:localhost:3000/api/articles`
+                    url: `http:localhost:3000/api/articles/orderTitle`
                 }
             }
         })
@@ -111,7 +111,7 @@ exports.articles_get_all_orderedBy_date =  async (req, res, next) => {
                 },
                 request: {
                     type: 'GET',
-                    url: `http:localhost:3000/api/articles`
+                    url: `http:localhost:3000/api/articles/orderDate`
                 }
             }
         })
@@ -152,7 +152,7 @@ exports.articles_searchBy_title =  async (req, res, next) => {
                     },
                     request: {
                         type: 'GET',
-                        url: `http:localhost:3000/api/articles`
+                        url: `http:localhost:3000/api/articles/searchTitle`
                     }
                 }
             })

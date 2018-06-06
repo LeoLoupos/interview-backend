@@ -37,7 +37,7 @@ function checkCachedData(req, res, next){
       }else{
         //Otherwise we setting up our response body , while we set an expired data , on the server
         res.sendResponse = res.send;
-        res.send = (body) => {
+        res.json = (body) => {
             redisClient.setex(key, 2 * 3600, JSON.stringify(body));
             res.sendResponse(body);
         }
