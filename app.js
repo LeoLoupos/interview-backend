@@ -9,10 +9,19 @@ var articlesRouter = require('./api/routes/articles')
 
 var app = express();
 
+//Helmet Protection
+app.use(helmet.noCache());
+app.use(helmet({
+    frameguard: {
+      action: 'deny' //allow if our app is <frame> || <object>
+    }
+}));
+
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
+//Using our packages , to the middleware cycle
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,13 +38,14 @@ app.use((req, res, next) => {
   //When browser posts or puts , sends first an OPTIONS request to check if he is allowed
   if ( req.method === 'OPTIONS' ){
       res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-      return res.status(200).json({}); //empty json to provide the headers answer
+      return res.status(200).json({}); //empty json body to provide the headers answer
   }
 
+  //let the cycle , continue
   next();
 });
 
-
+//Our only Route
 app.use('/api/articles', articlesRouter);
 
 
