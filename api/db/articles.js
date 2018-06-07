@@ -12,6 +12,12 @@ This file exports 4 functions , these functions are be used to connect and retri
  NOTE: Because these functions are not a middleware , we can not do : next(new Error(err)) , so we need winston 
 */
 
+/* Tables:
+    -articles
+    -creators
+*/
+const articles_table = `articles`
+const creators_table = `creators`
 
 exports.articles_get_all =  async () => {
     //Setting up a postgre client and connection
@@ -26,15 +32,15 @@ exports.articles_get_all =  async () => {
         //stores the result from all the articles query
         result = await client.query(`
         SELECT 
-        articles.article_id,
-        articles.title,
-        articles.thumbnail,
-        articles.creator_id,
-        articles.createdat,
-        creators.creator_id,
-        creators.name,
-        creators.profileurl 
-        FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id`);
+        ${articles_table}.article_id,
+        ${articles_table}.title,
+        ${articles_table}.thumbnail,
+        ${articles_table}.creator_id,
+        ${articles_table}.createdat,
+        ${creators_table}.creator_id,
+        ${creators_table}.name,
+        ${creators_table}.profileurl 
+        FROM ${articles_table} INNER JOIN ${creators_table} ON ${articles_table}.creator_id = ${creators_table}.creator_id`);
          
         //close postgresql db connection
         await client.end();
@@ -60,15 +66,16 @@ exports.articles_get_all_orderedBy_title =  async () => {
          //stores the result from all the articles query (order By title)
         result = await client.query(`
          SELECT
-         articles.article_id,
-         articles.title,
-         articles.thumbnail,
-         articles.creator_id,
-         articles.createdat,
-         creators.creator_id,
-         creators.name,
-         creators.profileurl 
-         FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id ORDER BY articles.title`);
+        ${articles_table}.article_id,
+        ${articles_table}.title,
+        ${articles_table}.thumbnail,
+        ${articles_table}.creator_id,
+        ${articles_table}.createdat,
+        ${creators_table}.creator_id,
+        ${creators_table}.name,
+        ${creators_table}.profileurl 
+        FROM ${articles_table} INNER JOIN ${creators_table} ON ${articles_table}.creator_id = ${creators_table}.creator_id 
+            ORDER BY ${articles_table}.title`);
             
         //close postgresql db connection
         await client.end();
@@ -92,17 +99,17 @@ exports.articles_get_all_orderedBy_date =  async () => {
     try {
         //stores the result from all the articles query (order By date)
         result = await client.query(`
-        SELECT 
-        articles.article_id,
-        articles.title,
-        articles.thumbnail,
-        articles.creator_id,
-        articles.createdat,
-        creators.creator_id,
-        creators.name,
-        creators.profileurl 
-        FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id 
-        ORDER BY articles.createdat`);
+        SELECT
+        ${articles_table}.article_id,
+        ${articles_table}.title,
+        ${articles_table}.thumbnail,
+        ${articles_table}.creator_id,
+        ${articles_table}.createdat,
+        ${creators_table}.creator_id,
+        ${creators_table}.name,
+        ${creators_table}.profileurl 
+        FROM ${articles_table} INNER JOIN ${creators_table} ON ${articles_table}.creator_id = ${creators_table}.creator_id 
+            ORDER BY articles.createdat`);
            
         //close postgresql db connection
         await client.end();
@@ -126,17 +133,16 @@ exports.articles_searchBy_title =  async (title) => {
         //stores the result from all the articles query (LIKE '%pattern%')
         result = await client.query(`
         SELECT 
-        articles.article_id,
-        articles.title,
-        articles.thumbnail,
-        articles.creator_id,
-        articles.createdat,
-        creators.creator_id,
-        creators.name,
-        creators.profileurl 
-        FROM articles INNER JOIN creators 
-        ON articles.creator_id = creators.creator_id 
-        WHERE articles.title LIKE '%${title}%' 
+        ${articles_table}.article_id,
+        ${articles_table}.title,
+        ${articles_table}.thumbnail,
+        ${articles_table}.creator_id,
+        ${articles_table}.createdat,
+        ${creators_table}.creator_id,
+        ${creators_table}.name,
+        ${creators_table}.profileurl 
+        FROM ${articles_table} INNER JOIN ${creators_table} ON ${articles_table}.creator_id = ${creators_table}.creator_id
+        WHERE ${articles_table}.title LIKE '%${title}%' 
         `);
 
         //close postgresql db connection

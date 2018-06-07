@@ -10,7 +10,7 @@ const redisCache = require('../middleware/redis_router_caching');
 /*
 
 This file holds the Express Router for our `/articles` path
-The controller , handles how/what the response will sent 
+The controller , handles how/what the response will be 
 
 */
 
