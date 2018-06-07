@@ -6,11 +6,9 @@ exports.articles_get_all =  async (req, res, next) => {
         //call the function and retrieve result
         var result = await articlesGetAll()
 
-    } catch (error) {
-        //for developement only . we could easily next(new Error())
-        res.status(500).json({
-                error: error
-        });    
+    } catch (error) { 
+        //let winston wrap the error
+        next(new Error(error)); 
     }
 
     if(result){
@@ -48,10 +46,8 @@ exports.articles_get_all_orderedBy_title =  async (req, res, next) => {
         var result = await articlesGetAll_orderBy_title();
 
     } catch (error) {
-        //for developement only . we could easily next(new Error())
-        res.status(500).json({
-                error: error
-        });    
+         //let winston wrap the error
+         next(new Error(error)); 
     }
 
     if(result){
@@ -89,10 +85,8 @@ exports.articles_get_all_orderedBy_date =  async (req, res, next) => {
         var result = await articlesGetAll_orderBy_date();
 
     } catch (error) {
-        //for developement only . we could easily next(new Error())
-        res.status(500).json({
-                error: error
-        });    
+         //let winston wrap the error
+         next(new Error(error)); 
     }
 
     if(result){
@@ -130,10 +124,8 @@ exports.articles_searchBy_title =  async (req, res, next) => {
         var result = await articlesSearchBy_title(req.query.title);
 
     } catch (error) {
-        //for developement only . we could easily next(new Error())
-        res.status(500).json({
-                error: error
-        });    
+         //let winston wrap the error
+         next(new Error(error)); 
     }
 
     if(result){

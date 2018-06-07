@@ -24,7 +24,7 @@ redisClient.on('error',function(err) {
     console.error("Error in Redis : " + err);
 });
 
-//This function , is checking if the expired data , if still is existing (in RAM) from previous calls
+//This function , is checking if the expired data , is still existing (in RAM) from previous calls
 function checkCachedData(req, res, next){
     //Setting Up a Url-based key
     let key = "__expIress__" + req.originalUrl || req.url;
@@ -32,8 +32,10 @@ function checkCachedData(req, res, next){
     //retrieve data if it exists
     redisClient.get(key, function(err, reply){
       //If it exists we respond with that data
+      redisClient.quit(); //close redis client
       if(reply){
-        res.send(JSON.parse(reply));
+        
+        res.json(JSON.parse(reply));
       }else{
         //Otherwise we setting up our response body , while we set an expired data , on the server
         res.sendResponse = res.send;

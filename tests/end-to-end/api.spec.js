@@ -35,6 +35,28 @@ describe("checkApi_Articles", function() {
         
     });
 
+});
+
+describe("checkApi_Articles_OrderTitle", function() {
+
+    it('it responds with 200 and all the articles in JSON', (done) => {
+        
+        //First request runs without the Redis caching
+        request(app)
+        .get('/api/articles')
+        .type('json')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200)
+        .end(function(err, res) {
+            if (err) {
+              return done(err);
+            }
+            done();
+        });
+        
+    });
+
     it('it responds with 200 and all the articles in TEXT', (done) => {
         
         //Second request runs with the Redis caching

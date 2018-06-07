@@ -1,8 +1,9 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var logger = require('morgan');
+var morgan = require('morgan');
 var helmet = require('helmet');
+var winston = require('./config/winston');
 
 //Router import
 var articlesRouter = require('./api/routes/articles')
@@ -25,9 +26,14 @@ app.use(helmet({
 //Prevents Bruteforces from the same IP
 // app.use(rateLimit.limiter);
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade')
+
+
+//Morgan with winston stream
+app.use(morgan('combined', { stream: winston.stream }));
 
 //Using util packages , to the middleware cycle
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -64,9 +70,12 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  //winston loggin 
+  winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+
+  //set the res status
   res.status(err.status || 500);
-  res.render('error');
+
 });
 
 module.exports = app;
