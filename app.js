@@ -14,6 +14,12 @@ var rateLimit = require('./api/middleware/security/ratelimit');
 //init express
 var app = express();
 
+/* If we have env.variable that we want to hide */
+if (process.env.NODE_ENV !== 'production') {
+  //we can use dotenv, that load .env files
+  require('dotenv').load();
+}
+
 //Helmet Protection
 app.use(helmet.noCache());
 app.use(helmet({

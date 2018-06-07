@@ -175,7 +175,7 @@ exports.articles_searchBy_title =  async (req, res, next) => {
         }
    
     } else { //If input is not a string
-        next(new Error(error));
+        next(new Error('Wrong Input'));
     }
     
 }

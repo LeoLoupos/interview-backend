@@ -3,14 +3,14 @@ const chai = require("chai");
 const expect = chai.expect;
 const sinon = require("sinon");
 
-//supertest helps us , to call Http endpoints and test their behavior
-const request = require("supertest");
-
 //Winston logging
 const winston = require('winston');
 
 //Our express app
 const app = require('../../app');
+
+//supertest helps us , to call Http endpoints and test their behavior
+const request = require("supertest");
 
 //Setting up our env variables
 process.env.POSTGRE_DATABASE_URL = 'postgres://Leo:password@localhost:5432/norbloc-interview';
@@ -34,11 +34,9 @@ describe("checkApi GET `/api/articles `", function() {
         } catch(e) {
             winston.error(e);
         }
-        //Result.text holds the response
-        expect(result.text).to.exist;
-        //Our query is correct , so the expected length has to be above 1
-        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.above(0);
-        expect(JSON.parse(result.text)).to.have.property('count');
+
+        //Our query is correct , so the result.text should exists
+        expect(JSON.parse(result.text)).to.exist;
        
        
     });
@@ -65,8 +63,9 @@ describe("checkApi GET `/api/articles/orderTitle `", function() {
         }
         //Result.text holds the response
         expect(result.text).to.exist;
-        //Our query is correct , so the expected length has to be above 1
-        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.above(0);
+
+        //Our query is correct , so the expected length has to be above 0
+        expect(JSON.parse(result.text)).to.have.property('articles').to.have.length.above(0);
         expect(JSON.parse(result.text)).to.have.property('count');
        
         
@@ -95,8 +94,10 @@ describe("checkApi GET `/api/articles/orderDate `", function() {
 
         //Result.text holds the response
         expect(result.text).to.exist;
-        //Our query is correct , so the expected length has to be above 1
 
+        //Our query is correct , so the expected length has to be above 0
+        expect(JSON.parse(result.text)).to.have.property('articles').to.have.length.above(0);
+        expect(JSON.parse(result.text)).to.have.property('count');
     
        
     });
@@ -106,7 +107,8 @@ describe("checkApi GET `/api/articles/orderDate `", function() {
 //End-to-End test for route /api/articles/searchTitle
 describe("checkApi GET `/api/articles/searchTitle `", function() {
 
-    it('it responds with 200 and all the articles order by Date in JSON', async () => {
+    //Giving
+    it('it responds with 200 , title = a, with result returned', async () => {
         
         const test_title = 'a';
         var result; //our result
@@ -126,13 +128,14 @@ describe("checkApi GET `/api/articles/searchTitle `", function() {
 
         //Result.text holds the response
         expect(result.text).to.exist;
-        //Our query is correct , so the expected length has to be above 1
-        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.above(0);
+        //Our query is correct , so the expected length has to be above 0
+        expect(JSON.parse(result.text)).to.have.property('articles').to.have.length.above(0);
         expect(JSON.parse(result.text)).to.have.property('count');
 
     });
 
-    it('it responds with 500 and no result', async () => {
+
+    it('it responds with 200, title = $3$#@!@# , with no result returned', async () => {
         
         const test_title = '$3$#@!@#';
         var result; //our result
@@ -155,9 +158,9 @@ describe("checkApi GET `/api/articles/searchTitle `", function() {
         expect(result.text).to.exist;
 
         //Our query is wrong , so the expected length has to be below 1
-        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.below(1);
         //Our count is 0
-        expect(JSON.parse(result.text)).to.have.property('count').to.equal(0);
+        expect(JSON.parse(result.text)).to.have.property('articles').to.have.length.below(1);
+        expect(JSON.parse(result.text)).to.have.property('count')
 
     });
 
