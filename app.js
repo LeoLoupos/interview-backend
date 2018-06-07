@@ -30,7 +30,7 @@ app.use(helmet({
 
 //Rate Limiter with Redis and express-rate-limit
 //Prevents Bruteforces from the same IP
-// app.use(rateLimit.limiter);
+app.use(rateLimit.limiter);
 
 
 //Morgan with winston stream
