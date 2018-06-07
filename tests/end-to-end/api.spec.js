@@ -1,78 +1,164 @@
+//Testing libraries
 const chai = require("chai");
 const expect = chai.expect;
 const sinon = require("sinon");
 
+//supertest helps us , to call Http endpoints and test their behavior
 const request = require("supertest");
 
+//Winston logging
+const winston = require('winston');
+
+//Our express app
 const app = require('../../app');
 
-/* 
-Spies: Creates fake functions which we can use to track executions. This means we can tell/ find out whether the function has been executed/ how many times its been called etc. We can also use spies on existing functions and get the same capability, to track those functions executions. We'll see this in action a bit later.
+//Setting up our env variables
+process.env.POSTGRE_DATABASE_URL = 'postgres://Leo:password@localhost:5432/norbloc-interview';
+process.env.PORT = 3000;
 
-Stubs: Enables us to replace functions. This gives us more control. We can return whatever we want or have our functions work in a way that suites us to be able to test multiple scenarios.
+//End-to-End test for route /api/articles
+describe("checkApi GET `/api/articles `", function() {
 
-Mocks: They are fake methods, that have pre-programmed behavior and pre-programmed expectations.
-*/
+    it('it responds with 200 and all the articles in JSON', async () => {
+        var result; //our result
 
-//End-to-End tests for route /api/articles
-describe("checkApi_Articles", function() {
-
-    it('it responds with 200 and all the articles in JSON', (done) => {
+        try {
+            //First request runs without the Redis caching
+            result = await request(app)
+            .get('/api/articles')
+            .type('json')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .expect(200)
         
-        //First request runs without the Redis caching
-        request(app)
-        .get('/api/articles')
-        .type('json')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(200)
-        .end(function(err, res) {
-            if (err) {
-              return done(err);
-            }
-            done();
-        });
+        } catch(e) {
+            winston.error(e);
+        }
+        //Result.text holds the response
+        expect(result.text).to.exist;
+        //Our query is correct , so the expected length has to be above 1
+        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.above(0);
+        expect(JSON.parse(result.text)).to.have.property('count');
+       
+       
+    });
+
+});
+
+//End-to-End test for route /api/articles/orderTitle
+describe("checkApi GET `/api/articles/orderTitle `", function() {
+
+    it('it responds with 200 and all the articles order by Title in JSON', async () => {
+        var result; //our result
+
+        try {
+            //First request runs without the Redis caching
+            result = await request(app)
+            .get('/api/articles/orderTitle')
+            .type('json')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .expect(200)
+        
+        } catch(e) {
+            winston.error(e);
+        }
+        //Result.text holds the response
+        expect(result.text).to.exist;
+        //Our query is correct , so the expected length has to be above 1
+        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.above(0);
+        expect(JSON.parse(result.text)).to.have.property('count');
+       
         
     });
 
 });
 
-describe("checkApi_Articles_OrderTitle", function() {
+//End-to-End test for route /api/articles/orderDate
+describe("checkApi GET `/api/articles/orderDate `", function() {
 
-    it('it responds with 200 and all the articles in JSON', (done) => {
+    it('it responds with 200 and all the articles order by Date in JSON', async () => {
+        var result; //our result
+
+        try {
+            //First request runs without the Redis caching
+            result = await request(app)
+            .get('/api/articles/orderDate')
+            .type('json')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .expect(200)
         
-        //First request runs without the Redis caching
-        request(app)
-        .get('/api/articles')
-        .type('json')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(200)
-        .end(function(err, res) {
-            if (err) {
-              return done(err);
-            }
-            done();
-        });
-        
+        } catch(e) {
+            winston.error(e);
+        }
+
+        //Result.text holds the response
+        expect(result.text).to.exist;
+        //Our query is correct , so the expected length has to be above 1
+
+    
+       
     });
 
-    it('it responds with 200 and all the articles in TEXT', (done) => {
+});
+
+//End-to-End test for route /api/articles/searchTitle
+describe("checkApi GET `/api/articles/searchTitle `", function() {
+
+    it('it responds with 200 and all the articles order by Date in JSON', async () => {
         
-        //Second request runs with the Redis caching
-        request(app)
-        .get('/api/articles')
-        .type('json')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(200)
-        .end(function(err, res) {
-            if (err) {
-              return done(err);
-            }
-            done();
-        });
+        const test_title = 'a';
+        var result; //our result
+
+        try {
+            //First request runs without the Redis caching
+            result = await request(app)
+            .get(`/api/articles/searchTitle?title=${test_title}`)
+            .type('json')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .expect(200)
         
+        } catch(e) {
+            winston.error(e);
+        }
+
+        //Result.text holds the response
+        expect(result.text).to.exist;
+        //Our query is correct , so the expected length has to be above 1
+        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.above(0);
+        expect(JSON.parse(result.text)).to.have.property('count');
+
+    });
+
+    it('it responds with 500 and no result', async () => {
+        
+        const test_title = '$3$#@!@#';
+        var result; //our result
+
+        try {
+            //First request runs without the Redis caching
+            result = await request(app)
+            .get(`/api/articles/searchTitle?title=${test_title}`)
+            .type('json')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .expect(200)
+        
+        } catch(e) {
+            winston.error(e);
+        }
+
+
+        //Result.text holds the response
+        expect(result.text).to.exist;
+
+        //Our query is wrong , so the expected length has to be below 1
+        expect(JSON.parse(result.text)).to.have.property("articles").to.have.length.below(1);
+        //Our count is 0
+        expect(JSON.parse(result.text)).to.have.property('count').to.equal(0);
+
     });
 
 });

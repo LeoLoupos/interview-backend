@@ -27,6 +27,7 @@ router.get('/orderDate',  redisCache.checkCachedData,
                           ArticlesController.articles_get_all_orderedBy_date );
 
 //Get all articles that match , the title we are seeking
+//@param{ String } title
 router.get('/searchTitle', ArticlesController.articles_searchBy_title );
 
 module.exports = router;

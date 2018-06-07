@@ -26,9 +26,6 @@ app.use(helmet({
 //Prevents Bruteforces from the same IP
 // app.use(rateLimit.limiter);
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade')
-
 
 //Morgan with winston stream
 app.use(morgan('combined', { stream: winston.stream }));

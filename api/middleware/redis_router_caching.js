@@ -32,15 +32,17 @@ function checkCachedData(req, res, next){
     //retrieve data if it exists
     redisClient.get(key, function(err, reply){
       //If it exists we respond with that data
-      redisClient.quit(); //close redis client
       if(reply){
         
         res.json(JSON.parse(reply));
+
       }else{
         //Otherwise we setting up our response body , while we set an expired data , on the server
         res.sendResponse = res.send;
-        res.json = (body) => {
-            redisClient.setex(key, 2 * 3600, JSON.stringify(body));
+        res.send = (body) => {
+            redisClient.setex(key, 2 * 3600, JSON.stringify(body) ,function (err) {
+                redisClient.quit();
+            });
             res.sendResponse(body);
         }
         next();

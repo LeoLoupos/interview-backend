@@ -19,9 +19,22 @@ exports.articles_get_all =  async () => {
     var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
 
+    //Our result variable
+    var result;
+
     try {
         //stores the result from all the articles query
-        const result = await  client.query('SELECT articles.article_id,articles.title,articles.thumbnail,articles.creator_id,articles.createdat,creators.creator_id,creators.name,creators.profileurl FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id');
+        result = await client.query(`
+        SELECT 
+        articles.article_id,
+        articles.title,
+        articles.thumbnail,
+        articles.creator_id,
+        articles.createdat,
+        creators.creator_id,
+        creators.name,
+        creators.profileurl 
+        FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id`);
          
         //close postgresql db connection
         await client.end();
@@ -40,9 +53,22 @@ exports.articles_get_all_orderedBy_title =  async () => {
     var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
 
+    //Our result variable
+    var result;
+
     try {
          //stores the result from all the articles query (order By title)
-        const result = await client.query('SELECT articles.article_id,articles.title,articles.thumbnail,articles.creator_id,articles.createdat,creators.creator_id,creators.name,creators.profileurl FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id ORDER BY articles.title');
+        result = await client.query(`
+         SELECT
+         articles.article_id,
+         articles.title,
+         articles.thumbnail,
+         articles.creator_id,
+         articles.createdat,
+         creators.creator_id,
+         creators.name,
+         creators.profileurl 
+         FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id ORDER BY articles.title`);
             
         //close postgresql db connection
         await client.end();
@@ -60,9 +86,23 @@ exports.articles_get_all_orderedBy_date =  async () => {
     var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
 
+    //Our result variable
+    var result;
+
     try {
         //stores the result from all the articles query (order By date)
-        const result = await client.query('SELECT articles.article_id,articles.title,articles.thumbnail,articles.creator_id,articles.createdat,creators.creator_id,creators.name,creators.profileurl FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id ORDER BY articles.createdat');
+        result = await client.query(`
+        SELECT 
+        articles.article_id,
+        articles.title,
+        articles.thumbnail,
+        articles.creator_id,
+        articles.createdat,
+        creators.creator_id,
+        creators.name,
+        creators.profileurl 
+        FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id 
+        ORDER BY articles.createdat`);
            
         //close postgresql db connection
         await client.end();
@@ -79,10 +119,24 @@ exports.articles_searchBy_title =  async (title) => {
     var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
     
+    //Our result variable
+    var result;
+
     try {
         //stores the result from all the articles query (LIKE '%pattern%')
-        const result = await client.query(`
-        SELECT articles.article_id,articles.title,articles.thumbnail,articles.creator_id,articles.createdat,creators.creator_id,creators.name,creators.profileurl FROM articles INNER JOIN creators ON articles.creator_id = creators.creator_id WHERE articles.title LIKE '%${title}%' 
+        result = await client.query(`
+        SELECT 
+        articles.article_id,
+        articles.title,
+        articles.thumbnail,
+        articles.creator_id,
+        articles.createdat,
+        creators.creator_id,
+        creators.name,
+        creators.profileurl 
+        FROM articles INNER JOIN creators 
+        ON articles.creator_id = creators.creator_id 
+        WHERE articles.title LIKE '%${title}%' 
         `);
 
         //close postgresql db connection
