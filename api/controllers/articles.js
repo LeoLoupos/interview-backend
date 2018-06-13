@@ -32,13 +32,13 @@ exports.articles_get_all =  async (req, res, next) => {
                     creator: {
                         name: doc.name,
                         profileUrl: doc.profileurl
-                    },
-                    request: {
-                        type: 'GET',
-                        url: `http:localhost:3000/api/articles`
                     }
                 }
-            })
+            }),
+            request: {
+                type: 'GET',
+                url: `http:localhost:3000/api/articles`
+            }
     });
 
     }
@@ -75,13 +75,13 @@ exports.articles_get_all_orderedBy_title =  async (req, res, next) => {
                     creator: {
                         name: doc.name,
                         profileUrl: doc.profileurl
-                    },
-                    request: {
-                        type: 'GET',
-                        url: `http:localhost:3000/api/articles/orderTitle`
                     }
                 }
-            })
+            }),
+            request: {
+                type: 'GET',
+                url: `http:localhost:3000/api/articles/orderTitle`
+            }
     });
 
     }
@@ -118,13 +118,13 @@ exports.articles_get_all_orderedBy_date =  async (req, res, next) => {
                     creator: {
                         name: doc.name,
                         profileUrl: doc.profileurl
-                    },
-                    request: {
-                        type: 'GET',
-                        url: `http:localhost:3000/api/articles/orderDate`
                     }
                 }
-            })
+            }),
+            request: {
+                type: 'GET',
+                url: `http:localhost:3000/api/articles/orderDate`
+            }
     });
 
     }
@@ -141,7 +141,7 @@ exports.articles_searchBy_title =  async (req, res, next) => {
 
     //If title is valid and error is undefined OR null
     if(error === undefined || error === null) {
-        
+
         //Getting the 'articles_searchBy_title'  functions
         let articlesSearchBy_title = require('../db/articles').articles_searchBy_title;
         let result;
@@ -170,13 +170,13 @@ exports.articles_searchBy_title =  async (req, res, next) => {
                         creator: {
                             name: doc.name,
                             profileUrl: doc.profileurl
-                        },
-                        request: {
-                            type: 'GET',
-                            url: `http:localhost:3000/api/articles/searchTitle`
                         }
                     }
-                })
+                }),
+                request: {
+                    type: 'GET',
+                    url: `http:localhost:3000/api/articles/searchTitle`
+                }
             });
 
         }
