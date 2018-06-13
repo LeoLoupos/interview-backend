@@ -1,11 +1,16 @@
+//Validation package
+const Joi = require('joi');
+
+
 //Controller for GET `/api/articles`
 exports.articles_get_all =  async (req, res, next) => {
     //Getting the 'articles_get_all'  functions
-    var articlesGetAll = require('../db/articles').articles_get_all;
+    let articlesGetAll = require('../db/articles').articles_get_all;
+    let result;
 
     try {
         //call the function and retrieve result
-        var result = await articlesGetAll()
+        result = await articlesGetAll()
 
     } catch (error) { 
         //let winston wrap the error
@@ -43,11 +48,12 @@ exports.articles_get_all =  async (req, res, next) => {
 //Controller for GET `/api/articles/orderTitle`
 exports.articles_get_all_orderedBy_title =  async (req, res, next) => {
     //Getting the 'articles_get_all_orderedBy_title'  functions
-    var articlesGetAll_orderBy_title = require('../db/articles').articles_get_all_orderedBy_title;
+    let articlesGetAll_orderBy_title = require('../db/articles').articles_get_all_orderedBy_title;
+    let result;
 
     try {
         //call the function and retrieve result
-        var result = await articlesGetAll_orderBy_title();
+        result = await articlesGetAll_orderBy_title();
 
     } catch (error) {
          //let winston wrap the error
@@ -85,11 +91,12 @@ exports.articles_get_all_orderedBy_title =  async (req, res, next) => {
 //Controller for GET `/api/articles/orderDate`
 exports.articles_get_all_orderedBy_date =  async (req, res, next) => {
     //Getting the 'articles_get_all_orderedBy_date'  functions
-    var articlesGetAll_orderBy_date = require('../db/articles').articles_get_all_orderedBy_date;
+    let articlesGetAll_orderBy_date = require('../db/articles').articles_get_all_orderedBy_date;
+    let result;
 
     try {
         //call the function and retrieve result
-        var result = await articlesGetAll_orderBy_date();
+        result = await articlesGetAll_orderBy_date();
 
     } catch (error) {
          //let winston wrap the error
@@ -124,24 +131,23 @@ exports.articles_get_all_orderedBy_date =  async (req, res, next) => {
     
 }
 
-//Help function to validate title
-function validInputTitle(title){
-    const validTitle = typeof title == 'string';
-
-    return validTitle;
-}
-
 //Controller for GET `/api/articles/searchTitle`
 exports.articles_searchBy_title =  async (req, res, next) => {
+    //Title has to be a valid string of length > 0
+    const title_schema  = Joi.string().min(1).required();
 
-    //If input is a string
-    if(validInputTitle(req.query.title)){
+    //Validate search input with Joi Schema.    
+    const {error} = Joi.validate(req.query.title, title_schema , { presence: "required" } );
+
+    //If title is valid and error is undefined OR null
+    if(error === undefined || error === null) {
         //Getting the 'articles_searchBy_title'  functions
-        var articlesSearchBy_title = require('../db/articles').articles_searchBy_title;
+        let articlesSearchBy_title = require('../db/articles').articles_searchBy_title;
+        let result;
 
         try {
             //call the function and retrieve result , with the title having the query data
-            var result = await articlesSearchBy_title(req.query.title);
+            result = await articlesSearchBy_title(req.query.title);
 
         } catch (error) {
             //let winston wrap the error

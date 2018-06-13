@@ -77,7 +77,13 @@ app.use(function(err, req, res, next) {
   winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
 
   //set the res status
-  res.status(err.status || 500);
+  res.status(err.status || 500).json({
+    error : {
+      message: err.message,
+      status: err.status || 500,
+      url: req.originalUrl
+    }
+  });
 
 });
 

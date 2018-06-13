@@ -1,4 +1,4 @@
-var winston = require('winston');
+const winston = require('winston');
 
 /*
 
@@ -21,12 +21,12 @@ const creators_table = `creators`
 
 exports.articles_get_all =  async () => {
     //Setting up a postgre client and connection
-    var pg = require('pg');        
-    var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
+    const pg = require('pg');        
+    const client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
 
     //Our result variable
-    var result;
+    let result;
 
     try {
         //stores the result from all the articles query
@@ -55,12 +55,12 @@ exports.articles_get_all =  async () => {
 
 exports.articles_get_all_orderedBy_title =  async () => {
     //Setting up a postgre client and connection
-    var pg = require('pg');        
-    var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
+    const pg = require('pg');        
+    const client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
 
     //Our result variable
-    var result;
+    let result;
 
     try {
          //stores the result from all the articles query (order By title)
@@ -89,12 +89,12 @@ exports.articles_get_all_orderedBy_title =  async () => {
 
 exports.articles_get_all_orderedBy_date =  async () => {
     //Setting up a postgre client and connection
-    var pg = require('pg');        
-    var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
+    const pg = require('pg');        
+    const client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
 
     //Our result variable
-    var result;
+    let result;
 
     try {
         //stores the result from all the articles query (order By date)
@@ -122,15 +122,16 @@ exports.articles_get_all_orderedBy_date =  async () => {
 
 exports.articles_searchBy_title =  async (title) => {
     //Setting up a postgre client and connection
-    var pg = require('pg');        
-    var client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
+    const pg = require('pg');        
+    const client = new pg.Client(process.env.POSTGRE_DATABASE_URL);
     client.connect();
     
     //Our result variable
-    var result;
+    let result;
 
     try {
         //stores the result from all the articles query (LIKE '%pattern%')
+        //Parametrized Query 
         result = await client.query(`
         SELECT 
         ${articles_table}.article_id,
@@ -142,8 +143,8 @@ exports.articles_searchBy_title =  async (title) => {
         ${creators_table}.name,
         ${creators_table}.profileurl 
         FROM ${articles_table} INNER JOIN ${creators_table} ON ${articles_table}.creator_id = ${creators_table}.creator_id
-        WHERE ${articles_table}.title LIKE '%${title}%' 
-        `);
+        WHERE ${articles_table}.title LIKE $1 ORDER BY ${articles_table}.title
+        `,[`%${title}%`]);
 
         //close postgresql db connection
         await client.end();
