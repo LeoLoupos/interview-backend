@@ -141,6 +141,7 @@ exports.articles_searchBy_title =  async (req, res, next) => {
 
     //If title is valid and error is undefined OR null
     if(error === undefined || error === null) {
+        
         //Getting the 'articles_searchBy_title'  functions
         let articlesSearchBy_title = require('../db/articles').articles_searchBy_title;
         let result;
