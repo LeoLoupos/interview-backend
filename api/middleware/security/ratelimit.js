@@ -1,5 +1,5 @@
-var RateLimit = require('express-rate-limit');
-var RedisStore = require('rate-limit-redis');
+const RateLimit = require('express-rate-limit');
+const RedisStore = require('rate-limit-redis');
 
 //Prevent Brute Forcing with Rate Limiting
 try{

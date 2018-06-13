@@ -20,7 +20,7 @@ process.env.PORT = 3000;
 describe("checkApi GET `/api/articles `", function() {
 
     it('it responds with 200 and all the articles in JSON', async () => {
-        var result; //our result
+        let result; //our result
 
         try {
             //First request runs without the Redis caching
@@ -47,7 +47,7 @@ describe("checkApi GET `/api/articles `", function() {
 describe("checkApi GET `/api/articles/orderTitle `", function() {
 
     it('it responds with 200 and all the articles order by Title in JSON', async () => {
-        var result; //our result
+        let result; //our result
 
         try {
             //First request runs without the Redis caching
@@ -77,7 +77,7 @@ describe("checkApi GET `/api/articles/orderTitle `", function() {
 describe("checkApi GET `/api/articles/orderDate `", function() {
 
     it('it responds with 200 and all the articles order by Date in JSON', async () => {
-        var result; //our result
+        let result; //our result
 
         try {
             //First request runs without the Redis caching
@@ -111,7 +111,7 @@ describe("checkApi GET `/api/articles/searchTitle `", function() {
     it('it responds with 200 , title = a, with result returned', async () => {
         
         const test_title = 'a';
-        var result; //our result
+        let result; //our result
 
         try {
             //First request runs without the Redis caching
@@ -138,7 +138,7 @@ describe("checkApi GET `/api/articles/searchTitle `", function() {
     it('it responds with 200, title = $3$#@!@# , with no result returned', async () => {
         
         const test_title = '$3$#@!@#';
-        var result; //our result
+        let result; //our result
 
         try {
             //First request runs without the Redis caching

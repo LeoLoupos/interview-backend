@@ -1,18 +1,18 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var morgan = require('morgan');
-var helmet = require('helmet');
-var winston = require('./config/winston');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const winston = require('./config/winston');
 
 //Router import
-var articlesRouter = require('./api/routes/articles')
+const articlesRouter = require('./api/routes/articles')
 
 //Rate Limit import
-var rateLimit = require('./api/middleware/security/ratelimit');
+const rateLimit = require('./api/middleware/security/ratelimit');
 
 //init express
-var app = express();
+const app = express();
 
 /* If we have env.variable that we want to hide */
 if (process.env.NODE_ENV !== 'production') {
